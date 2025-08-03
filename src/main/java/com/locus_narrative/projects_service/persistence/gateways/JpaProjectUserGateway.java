@@ -54,7 +54,7 @@ public class JpaProjectUserGateway implements ProjectUserPort {
         );
 
         if (model.isEmpty())
-            throw new ProjectUserNotFoundException("Project or user in the project not found.");
+            throw new ProjectUserNotFoundException();
 
         if (entity.getRole() != null)
             model.get().setRole(entity.getRole());
@@ -77,7 +77,7 @@ public class JpaProjectUserGateway implements ProjectUserPort {
         );
 
         if (model.isEmpty())
-            throw new ProjectUserNotFoundException("Project or user in the project not found.");
+            throw new ProjectUserNotFoundException();
 
         return mapper.toEntity(model.get());
     }
@@ -88,7 +88,7 @@ public class JpaProjectUserGateway implements ProjectUserPort {
         Optional<ProjectUserModel> model = repository.findByProjectUuidAndUserUuid(projectUuid, userUuid);
 
         if (model.isEmpty())
-            throw new ProjectUserNotFoundException("Project or user in the project not found.");
+            throw new ProjectUserNotFoundException();
 
         repository.delete(model.get());
     }
