@@ -1,6 +1,5 @@
 package com.locus_narrative.projects_service.application.usecases.projectUsers;
 
-import com.locus_narrative.projects_service.domain.exceptions.ProjectUserNotFoundException;
 import com.locus_narrative.projects_service.domain.ports.ProjectUserPort;
 
 import java.util.UUID;
@@ -12,7 +11,7 @@ public class RemoveUserFromProjectUseCase {
         this.port = port;
     }
 
-    public void invoke(UUID projectUuid, UUID userUuid) throws ProjectUserNotFoundException {
+    public void invoke(UUID projectUuid, UUID userUuid) {
         port.delete(projectUuid, userUuid);
     }
 }

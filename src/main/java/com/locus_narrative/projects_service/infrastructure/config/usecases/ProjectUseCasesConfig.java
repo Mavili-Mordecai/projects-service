@@ -2,15 +2,14 @@ package com.locus_narrative.projects_service.infrastructure.config.usecases;
 
 import com.locus_narrative.projects_service.application.usecases.projects.*;
 import com.locus_narrative.projects_service.domain.ports.ProjectPort;
-import com.locus_narrative.projects_service.domain.ports.ProjectUserPort;
 import org.springframework.context.annotation.Bean;
 import org.springframework.context.annotation.Configuration;
 
 @Configuration
 public class ProjectUseCasesConfig {
     @Bean
-    public CreateProjectUseCase createProjectUseCase(ProjectPort port, ProjectUserPort projectUserPort) {
-        return new CreateProjectUseCase(port, projectUserPort);
+    public CreateProjectUseCase createProjectUseCase(ProjectPort port) {
+        return new CreateProjectUseCase(port);
     }
 
     @Bean
@@ -24,8 +23,8 @@ public class ProjectUseCasesConfig {
     }
 
     @Bean
-    public GetProjectsByOwnerUseCase getProjectsByOwnerUseCase(ProjectPort port) {
-        return new GetProjectsByOwnerUseCase(port);
+    public GetAllProjectsByOwnerUseCase getProjectsByOwnerUseCase(ProjectPort port) {
+        return new GetAllProjectsByOwnerUseCase(port);
     }
 
     @Bean

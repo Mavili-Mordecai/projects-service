@@ -1,6 +1,5 @@
 package com.locus_narrative.projects_service.application.usecases.projects;
 
-import com.locus_narrative.projects_service.domain.exceptions.ProjectNotFoundException;
 import com.locus_narrative.projects_service.domain.ports.ProjectPort;
 
 import java.util.UUID;
@@ -12,7 +11,7 @@ public class DeleteProjectUseCase {
         this.port = port;
     }
 
-    public void invoke(UUID uuid) throws ProjectNotFoundException {
+    public void invoke(UUID uuid) {
         port.delete(uuid);
     }
 }

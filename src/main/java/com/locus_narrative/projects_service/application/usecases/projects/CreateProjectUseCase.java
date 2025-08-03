@@ -11,20 +11,15 @@ import java.util.UUID;
 
 public class CreateProjectUseCase {
     private final ProjectPort port;
-    private final ProjectUserPort projectUserPort;
 
-    public CreateProjectUseCase(ProjectPort port, ProjectUserPort projectUserPort) {
+    public CreateProjectUseCase(ProjectPort port) {
         this.port = port;
-        this.projectUserPort = projectUserPort;
     }
 
     public ProjectEntity invoke(UUID ownedUuid, CreateProjectRequest request) {
         ProjectEntity project = port.insert(
-                new ProjectEntity(request.getName(), UUID.randomUUID())
-        );
-
-        ProjectUserEntity projectUserEntity = projectUserPort.insert(
-                new ProjectUserEntity(project, ownedUuid, ProjectUserRole.OWNER)
+                new ProjectEntity(request.getName(), UUID.randomUUID()),
+                ownedUuid
         );
 
         return project;

@@ -6,10 +6,10 @@ import com.locus_narrative.projects_service.domain.ports.ProjectPort;
 import java.util.List;
 import java.util.UUID;
 
-public class GetProjectsByOwnerUseCase {
+public class GetAllProjectsByOwnerUseCase {
     private final ProjectPort port;
 
-    public GetProjectsByOwnerUseCase(ProjectPort port) {
+    public GetAllProjectsByOwnerUseCase(ProjectPort port) {
         this.port = port;
     }
 

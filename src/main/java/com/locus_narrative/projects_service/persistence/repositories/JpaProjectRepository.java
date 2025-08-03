@@ -17,7 +17,7 @@ public interface JpaProjectRepository extends JpaRepository<ProjectModel, Long> 
     @Query("""
             SELECT pm
             FROM ProjectModel pm
-            JOIN FETCH ProjectUserModel pum
+            JOIN FETCH ProjectUserModel pum ON pum.project.id = pm.id
             WHERE
                 pum.userUuid = :userUuid AND
                 pum.role = 'OWNER'

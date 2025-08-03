@@ -2,6 +2,7 @@ package com.locus_narrative.projects_service.presentation.interceptors;
 
 import com.locus_narrative.projects_service.application.dto.Response;
 import com.locus_narrative.projects_service.application.dto.Responses;
+import com.locus_narrative.projects_service.domain.exceptions.ApiException;
 import org.springframework.context.support.DefaultMessageSourceResolvable;
 import org.springframework.http.ResponseEntity;
 import org.springframework.http.converter.HttpMessageNotReadableException;
@@ -30,5 +31,10 @@ public class GlobalExceptionHandler {
         return ResponseEntity
                 .badRequest()
                 .body(Responses.badRequest("Invalid request body."));
+    }
+
+    @ExceptionHandler(ApiException.class)
+    public ResponseEntity<Response<?>> handleApiException(ApiException ex) {
+        return ResponseEntity.status(ex.getStatus()).body(Responses.error(ex.getMessage(), ex.getStatus()));
     }
 }
