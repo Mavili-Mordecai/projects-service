@@ -12,6 +12,8 @@ public class ProjectEntity {
 
     public ProjectEntity() {}
 
+    public ProjectEntity(UUID uuid) { this.uuid = uuid; }
+
     public ProjectEntity(String name, UUID uuid) {
         this.name = name;
         this.uuid = uuid;

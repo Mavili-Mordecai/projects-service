@@ -27,9 +27,38 @@ public class JpaProjectUserGateway implements ProjectUserPort {
     }
 
     @Override
+    @Transactional
+    public ProjectUserEntity update(ProjectUserEntity entity) throws ProjectUserNotFoundException {
+        Optional<ProjectUserModel> model = repository.findByProjectUuidAndUserUuid(
+                entity.getProject().getUuid(),
+                entity.getUserUuid()
+        );
+
+        if (model.isEmpty()) throw new ProjectUserNotFoundException("Project or user in the project not found.");
+
+        if (entity.getRole() != null)
+            model.get().setRole(entity.getRole());
+
+        return mapper.toEntity(model.get());
+    }
+
+    @Override
     @Transactional(readOnly = true)
-    public List<ProjectUserEntity> getAllByProjectUuid(UUID projectUuid) {
+    public List<ProjectUserEntity> getAllInProject(UUID projectUuid) {
         return mapper.toEntityList(repository.findAllByProjectUuid(projectUuid));
+    }
+
+    @Override
+    @Transactional(readOnly = true)
+    public ProjectUserEntity getByProjectAndUser(UUID projectUuid, UUID userUuid) throws ProjectUserNotFoundException {
+        Optional<ProjectUserModel> model = repository.findByProjectUuidAndUserUuid(
+                projectUuid,
+                userUuid
+        );
+
+        if (model.isEmpty()) throw new ProjectUserNotFoundException("Project or user in the project not found.");
+
+        return mapper.toEntity(model.get());
     }
 
     @Override

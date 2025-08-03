@@ -8,6 +8,8 @@ import java.util.UUID;
 
 public interface ProjectUserPort {
     ProjectUserEntity insert(ProjectUserEntity entity);
-    List<ProjectUserEntity> getAllByProjectUuid(UUID projectUuid);
+    ProjectUserEntity update(ProjectUserEntity entity) throws ProjectUserNotFoundException;
+    List<ProjectUserEntity> getAllInProject(UUID projectUuid);
+    ProjectUserEntity getByProjectAndUser(UUID projectUuid, UUID userUuid) throws ProjectUserNotFoundException;
     void delete(UUID projectUuid, UUID userUuid) throws ProjectUserNotFoundException;
 }
