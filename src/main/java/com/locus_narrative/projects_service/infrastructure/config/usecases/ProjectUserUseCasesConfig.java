@@ -31,4 +31,9 @@ public class ProjectUserUseCasesConfig {
     public UpdateUserRoleInProjectUseCase updateUserRoleInProjectUseCase(ProjectUserPort port) {
         return new UpdateUserRoleInProjectUseCase(port);
     }
+
+    @Bean
+    public EnsureUserHasRoleInProjectUseCase ensureUserHasRoleInProjectUseCase(GetUserRoleInProjectUseCase getUserRoleInProjectUseCase) {
+        return new EnsureUserHasRoleInProjectUseCase(getUserRoleInProjectUseCase);
+    }
 }

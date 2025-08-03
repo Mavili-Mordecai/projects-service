@@ -4,12 +4,10 @@ import com.locus_narrative.projects_service.application.dto.Response;
 import com.locus_narrative.projects_service.application.dto.Responses;
 import com.locus_narrative.projects_service.application.dto.requests.projects.CreateProjectRequest;
 import com.locus_narrative.projects_service.application.dto.requests.projects.UpdateProjectRequest;
-import com.locus_narrative.projects_service.application.usecases.projectUsers.GetUserRoleInProjectUseCase;
+import com.locus_narrative.projects_service.application.usecases.projectUsers.EnsureUserHasRoleInProjectUseCase;
 import com.locus_narrative.projects_service.application.usecases.projects.*;
 import com.locus_narrative.projects_service.domain.entities.ProjectEntity;
-import com.locus_narrative.projects_service.domain.entities.ProjectUserEntity;
 import com.locus_narrative.projects_service.domain.entities.ProjectUserRole;
-import com.locus_narrative.projects_service.domain.exceptions.AccessDeniedException;
 import io.swagger.v3.oas.annotations.tags.Tag;
 import lombok.RequiredArgsConstructor;
 import org.springframework.http.HttpStatus;
@@ -30,7 +28,7 @@ public class ProjectController extends BaseController {
     private final GetAllProjectsByOwnerUseCase getAllProjectsByOwnerUseCase;
     private final DeleteProjectUseCase deleteProjectUseCase;
 
-    private final GetUserRoleInProjectUseCase getUserRoleInProjectUseCase;
+    private final EnsureUserHasRoleInProjectUseCase ensureUserHasRoleInProjectUseCase;
 
     @PutMapping
     private ResponseEntity<Response<?>> create(@RequestBody @Validated(CreateProjectRequest.class) CreateProjectRequest request) {
@@ -41,41 +39,35 @@ public class ProjectController extends BaseController {
 
     @PatchMapping("/{projectUuid}")
     private ResponseEntity<Response<?>> update(@PathVariable("projectUuid") UUID projectUuid, @RequestBody @Validated(UpdateProjectRequest.class) UpdateProjectRequest request) {
-        UUID principalUuid = getUserUuid();
-
-        ProjectUserEntity projectUser = getUserRoleInProjectUseCase.invoke(projectUuid, principalUuid);
-        if (projectUser.getRole() != ProjectUserRole.OWNER) throw new AccessDeniedException();
+        ensureUserHasRoleInProjectUseCase.invoke(projectUuid, getUserUuid(), ProjectUserRole.OWNER);
 
         ProjectEntity entity = updateProjectUseCase.invoke(projectUuid, request);
+
         return ResponseEntity.ok(Responses.ok(entity));
     }
 
     @DeleteMapping("/{projectUuid}")
     private ResponseEntity<Response<?>> delete(@PathVariable("projectUuid") UUID projectUuid) {
-        UUID principalUuid = getUserUuid();
-
-        ProjectUserEntity projectUser = getUserRoleInProjectUseCase.invoke(projectUuid, principalUuid);
-        if (projectUser.getRole() != ProjectUserRole.OWNER) throw new AccessDeniedException();
+        ensureUserHasRoleInProjectUseCase.invoke(projectUuid, getUserUuid(), ProjectUserRole.OWNER);
 
         deleteProjectUseCase.invoke(projectUuid);
+
         return ResponseEntity.ok(Responses.ok());
 
     }
 
     @GetMapping("/{projectUuid}")
     private ResponseEntity<Response<?>> getByUuid(@PathVariable("projectUuid") UUID projectUuid) {
-        UUID principalUuid = getUserUuid();
-
-        getUserRoleInProjectUseCase.invoke(projectUuid, principalUuid);
+        ensureUserHasRoleInProjectUseCase.invoke(projectUuid, getUserUuid(), ProjectUserRole.MEMBER);
 
         ProjectEntity project = getProjectByUuidUseCase.invoke(projectUuid);
+
         return ResponseEntity.ok(Responses.ok(project));
     }
 
     @GetMapping
     private ResponseEntity<Response<?>> getAllByOwner() {
         UUID principalUuid = getUserUuid();
-
         return ResponseEntity.ok(Responses.ok(getAllProjectsByOwnerUseCase.invoke(principalUuid)));
     }
 }
