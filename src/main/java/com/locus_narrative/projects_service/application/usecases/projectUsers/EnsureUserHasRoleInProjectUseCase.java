@@ -7,7 +7,7 @@ import com.locus_narrative.projects_service.domain.exceptions.AccessDeniedExcept
 import java.util.UUID;
 
 public class EnsureUserHasRoleInProjectUseCase {
-    private GetUserRoleInProjectUseCase getUserRoleInProjectUseCase;
+    private final GetUserRoleInProjectUseCase getUserRoleInProjectUseCase;
 
     public EnsureUserHasRoleInProjectUseCase(GetUserRoleInProjectUseCase getUserRoleInProjectUseCase) {
         this.getUserRoleInProjectUseCase = getUserRoleInProjectUseCase;
