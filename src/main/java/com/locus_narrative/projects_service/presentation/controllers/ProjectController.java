@@ -53,7 +53,6 @@ public class ProjectController extends BaseController {
         deleteProjectUseCase.invoke(projectUuid);
 
         return ResponseEntity.ok(Responses.ok());
-
     }
 
     @GetMapping("/{projectUuid}")

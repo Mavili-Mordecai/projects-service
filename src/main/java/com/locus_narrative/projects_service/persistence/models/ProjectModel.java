@@ -35,4 +35,6 @@ public class ProjectModel {
 
     @OneToMany(mappedBy = "project", cascade = CascadeType.ALL, fetch = FetchType.LAZY)
     private List<ProjectUserModel> users;
+
+
 }
